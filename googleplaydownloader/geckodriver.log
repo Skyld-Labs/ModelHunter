@@ -1,0 +1,16 @@
+1673270236041	geckodriver	INFO	Listening on 127.0.0.1:35927
+1673270236618	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "--headless" "--remote-debugging-port" "37021" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofiledBKOwi"
+*** You are running in headless mode.
+Crash Annotation GraphicsCriticalError: |[0][GFX1-]: glxtest: VA-API test failed: failed to initialise VAAPI connection. (t=0.569209) [GFX1-]: glxtest: VA-API test failed: failed to initialise VAAPI connection.
+1673270237309	Marionette	INFO	Marionette enabled
+1673270237316	Marionette	INFO	Listening on port 39923
+Read port: 39923
+WebDriver BiDi listening on ws://127.0.0.1:37021
+1673270237506	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+Crash Annotation GraphicsCriticalError: |[0][GFX1-]: glxtest: VA-API test failed: failed to initialise VAAPI connection. (t=0.569209) |[1][GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt (t=1.69603) [GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at /tmp/rust_mozprofiledBKOwi/search.json.mozlz4", (void 0)))
+DevTools listening on ws://127.0.0.1:37021/devtools/browser/1667adde-6c16-48ad-95a6-422c87399c61
+[Parent 587088, Main Thread] WARNING: g_object_get: assertion 'G_IS_OBJECT (object)' failed: 'glib warning', file /builddir/build/BUILD/firefox-108.0.1/toolkit/xre/nsSigHandlers.cpp:167
+
+(firefox:587088): GLib-GObject-CRITICAL **: 14:17:44.603: g_object_get: assertion 'G_IS_OBJECT (object)' failed
+1673270267366	Marionette	INFO	Stopped listening on port 39923

@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "ApkDownloader_Combo"
+version = "0.1.0"
+description = ""
+authors = ["SKYLD <contact@skyld.io>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+selenium = "^4.6.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
