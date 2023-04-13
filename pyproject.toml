@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "modelhunter"
+version = "0.1.0"
+description = "auto analyse market place"
+authors = ["SKYLD <contact@skyld.io>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+configparser = "^5.3.0"
+progressbar = "^2.5"
+db-sqlite3 = "^0.0.1"
+selenium = "^4.6.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
