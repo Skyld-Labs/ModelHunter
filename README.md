@@ -116,7 +116,7 @@ Start scrapping, list of application will be write in app_ids.txt
 
 **You can use it without any option it will take the default config inside config.sh :**
 ```
-#!/bin/bash
+#!/usr/bin/env bash
 APP_ID='app_ids.txt'
 APP_TESTED='app_ids_tested.txt'
 

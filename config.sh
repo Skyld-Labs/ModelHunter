@@ -1,4 +1,3 @@
-#!/bin/bash
 APP_ID='app_ids.txt'
 APP_TESTED='app_ids_tested.txt'
 

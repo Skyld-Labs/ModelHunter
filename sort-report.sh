@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 APP_RESULT='APP_RESULT/'
 SORT_RESULT='SORT_RESULT'
