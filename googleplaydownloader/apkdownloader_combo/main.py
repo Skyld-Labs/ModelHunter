@@ -9,18 +9,21 @@ import time, sys, os
 
 
 def get_browser(directory):
+    firefox_options = Options()
     if directory:
-        firefox_options = Options()
-        
         # Change directory where download are sent 
         firefox_options.set_preference("browser.download.folderList", 2)
         firefox_options.set_preference("browser.download.useDownloadDir", True)
         firefox_options.set_preference("browser.download.dir", directory)
-        
-        # Open firefox with-out UI : 
-       	firefox_options.add_argument('--headless')
+
+        # Open firefox without GUI
+        firefox_options.add_argument('--headless')
 
     browser = webdriver.Firefox(options=firefox_options)
+
+    # Make sure we have enough space to see buttons
+    browser.set_window_size(1920, 1080)
+
     return browser
 
 def getDownLoadedFileName(browser, waitTime):
