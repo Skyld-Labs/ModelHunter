@@ -1,9 +1,6 @@
 # Apk Downloader 
 
-This program able us to download from linux command line, android package. To do that we use selenium that can script browser to download application from site : https://apkcombo.com/
-
-We use that site because there is no limite of download. 
-
+This program downloads android packages using selenium that can script the browser Firefox. Applications are downloaded from the website : https://apkcombo.com/ that has unlimited downloads.
 
 ``` 
 Usage :
