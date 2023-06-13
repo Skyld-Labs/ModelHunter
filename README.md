@@ -1,6 +1,6 @@
 # ModelHunter: ML Model Extraction Pipeline for Android Applications
 
-### ModelHunter is a powerful pipeline designed to extract and test machine learning models from Android applications available on the Google Play Store.
+### ModelHunter is a powerful pipeline designed to extract machine learning models from Android applications available on the Google Play Store.
 
 ---
 ## Requirements : 
