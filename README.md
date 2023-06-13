@@ -74,7 +74,7 @@ Spawning shell within ...
 $ ./hunt.sh -h
 Usage hunt.sh [-v][-s][-h][-p {package_id}][-d]{directory with apks}
 		-v | Verbose
-		-s | Scrap package id on Google play, keywords for research are inside search-keyword.txt
+		-s | Scrap package ID on Google play, keywords for research are inside search-keyword.txt
 		-p {package_id}| APK to test, it will be downloaded, the results can be found inside APP_RESULT and the database
 		-d {/path/to/apk_directory} | Directory with APKs to test 
 ```
@@ -96,16 +96,16 @@ com.example.app will be saved at : /ModelHunter/APK_DIRECTORY
 
 ```console
 $./hunt.sh -d ./APK_DIRECTORY
-Start analysis of package com.example.app
-Trying download it com.example.app
+Starting analysis of com.example.app
+Trying to download com.example.app
 ```
 
 
-**Scrap Application package id on Google Play and start analyse them :**
+**Scraping application package IDs on Google Play and analysing them :**
 
 ```
 $ ./hunt.sh -s
-Start scrapping, list of application will be write in app_ids.txt
+Start scrapping, list of applications will be writen in app_ids.txt
 ###
 # Test 0/22541 with application : com.example.app
 ###
@@ -113,7 +113,7 @@ Start scrapping, list of application will be write in app_ids.txt
 
 
 
-**You can use it without any option it will take the default config inside config.sh :**
+**You can use it without any options, it will take the default config inside config.sh :**
 ```
 #!/usr/bin/env bash
 APP_ID='app_ids.txt'
@@ -131,11 +131,11 @@ SAVE_APK='TRUE' # FALSE TO NOT SAVE APK
 SCRAPING='FALSE'
 ```
 
-For example you can change the way you want download APK if you have a better tool to do it!
+For example you can change the way you want to download the APKs if you have a better tool to do it!
 
 ---
 
-## Result : 
+## Results : 
 You will find : 
-- inside APP_RESULT/ directory - all reports of tested app and their models if a model was found.
+- inside APP_RESULT/ directory - all reports of tested apps and their models if a model was found.
 - inside modelhunter/model_stat.db - a SQLite DB with all important information for further analysis 
