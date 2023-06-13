@@ -1,19 +1,18 @@
-# ModelHunter : Pipeline for extract ML model from android applications
+# ModelHunter: ML Model Extraction Pipeline for Android Applications
 
-### ModelHunter is a pipeline that able us to test and extract model from application from the Google PlayStore.
+### ModelHunter is a powerful pipeline designed to extract and test machine learning models from Android applications available on the Google Play Store.
 
 ---
-## Requirement : 
+## Requirements : 
 
-A linux base system and firefox install to be able to download app with Selenium.
+A Linux-based system with Firefox installed to enable app downloads using Selenium.
+Install the following Linux packages:
 
-Some linux package : 
 ```console
 sudo apt-get install aapt apktool silversearch-ag nm md5sum
 ```
 
-There is some python package needed too.
-To install them you can do it manually : 
+Install the required Python packages with pip:
 ```
 pip install configparser progressbar db-sqlite3 selenium
 ```
@@ -61,9 +60,9 @@ Spawning shell within ...
 - `hunt.sh` - Pipeline for app analysis
 - `scrapping-playstore.sh` - Scrap Google Play 
 - `sort-report.sh` - extract some information from report
-- `googleplaydownloader/apkdownloader_combo/main.py` -  Python script to download Android app
-- `modelhunter/modelhunter.py` - script to find and extract model 
-- `modelhunter/model_stat.db` - result inside a SQLite DB 
+- `googleplaydownloader/apkdownloader_combo/main.py` -  Python script to download Android apps
+- `modelhunter/modelhunter.py` - script to find and extract models 
+- `modelhunter/model_stat.db` - results inside a SQLite DB 
 
 
 
@@ -73,32 +72,32 @@ Spawning shell within ...
 
 ```console
 $ ./hunt.sh -h
-Usage hunt.sh [-v][-s][-h][-p {package_id}][-d]{directory with apk}
+Usage hunt.sh [-v][-s][-h][-p {package_id}][-d]{directory with apks}
 		-v | Verbose
-		-s | Scrap package id on Google play, keyword for research are inside search-keyword.txt
-		-p {package_id}| APK to test, it will be download, then test result can be found inside APP_RESULT, and databse
-		-d {/path/to/apk_directory} | Directory with APK to test 
+		-s | Scrap package id on Google play, keywords for research are inside search-keyword.txt
+		-p {package_id}| APK to test, it will be downloaded, the results can be found inside APP_RESULT and the database
+		-d {/path/to/apk_directory} | Directory with APKs to test 
 ```
 
 --- 
 
 ### Example : 
 
-**Test an app :**
+**Testing an app :**
 
 ```console
 $ ./hunt.sh -p com.example.app
-Start analysis of package com.example.app
-Try download it com.example.app
-com.example.app will be save at : /ModelHunter/APK_DIRECTORY
+Starting analysis of com.example.app
+Trying to download com.example.app
+com.example.app will be saved at : /ModelHunter/APK_DIRECTORY
 ```
 
-**Test all app from a directory :**
+**Testing all apps from a directory :**
 
 ```console
 $./hunt.sh -d ./APK_DIRECTORY
 Start analysis of package com.example.app
-Try download it com.example.app
+Trying download it com.example.app
 ```
 
 
@@ -138,5 +137,5 @@ For example you can change the way you want download APK if you have a better to
 
 ## Result : 
 You will find : 
-- inside APP_RESULT/ directory - all report of tested app and their model if model are found.
-- inside modelhunter/model_stat.db - a SQLite DB with all importante information to further analysis 
+- inside APP_RESULT/ directory - all reports of tested app and their models if a model was found.
+- inside modelhunter/model_stat.db - a SQLite DB with all important information for further analysis 
