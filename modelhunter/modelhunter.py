@@ -118,6 +118,7 @@ class ModelHunter:
         except:
             os.mkdir(self._pmodels)
 
+    # Creation of the entropy_report file
     def setup_entropy_report(self):
         self._entropy_report_path = self._outdir + '/' + 'entropy_report' 
         if not os.path.exists(self._entropy_report_path):
@@ -247,6 +248,7 @@ class ModelHunter:
         self._cur.execute(all_essential_information_view)
         self._connect.commit()
 
+    # Put in the database the framework and if it is open source or not
     def setup_framework_database(self):
         frameworklist = self._config.get("config","framework").split(',')
         for fw in frameworklist:
@@ -282,7 +284,8 @@ class ModelHunter:
         if res != 0:
             logging.error("error in executing cmd :" + shell_cmd)
         pass
-
+    
+    # return the package name such as com.example.app
     def get_package_name(self):
         if self._args.decomposed_package is True:
             # TODO extract package name from AndroidManifest.xml
@@ -300,6 +303,7 @@ class ModelHunter:
                 return "unknown_apkpath"
         return res
 
+    # Decompiling the apk with apktool
     def decompose(self, pkgname):
         decpath = os.path.abspath(self._decdir+pkgname)
         apkpath = os.path.abspath(self._apkpath)
@@ -313,12 +317,13 @@ class ModelHunter:
             self.run_wo(shell_cmd)
         pass
 
+    # remove directories
     def remove_decomposed_files(self):
         if self._args.decomposed_package is True:
             # only remove respath, but keep decomposed_path if running from decomposed_package 
             respath = self._respath 
             if not os.path.exists(respath):
-                logging.warning(decpath + " not exists!")
+                logging.warning(decpath + " doesn't exist!")
             else:
                 shell_cmd = "rm  -r %s" % (respath)
                 self.run_wo(shell_cmd)
@@ -326,7 +331,7 @@ class ModelHunter:
             decpath = self._decpath 
             respath = self._respath 
             if not os.path.exists(decpath) or not os.path.exists(respath):
-                logging.warning(decpath + " not exists!")
+                logging.warning(decpath + " doesn't exist!")
             else:
                 shell_cmd = "rm  -r %s" % (decpath)
                 self.run_wo(shell_cmd)
@@ -334,6 +339,7 @@ class ModelHunter:
                 self.run_wo(shell_cmd)
         pass
 
+    # Add recursively the path of all the files inside 'dir'
     def ls_dir(self, dir):
         filenames = []
         for subdir, dirs, files in os.walk(dir):
@@ -342,6 +348,7 @@ class ModelHunter:
                 filenames.append(filepath)
         return filenames
 
+    
     def suffix_analyzer(self, filelist):
         suffix = self._config.get("model_pattern","suffix").split(',')
         suffix = [sf.strip() for sf in suffix]
@@ -352,6 +359,7 @@ class ModelHunter:
                     res.append(f)
         return res
 
+    # return a list of the files that could potentially have a model
     def keywords_analyzer(self, filelist, config_section):
         keywords = self._config.get(config_section,"keywords").split(',')
         keywords = [x.strip() for x in keywords]
@@ -362,9 +370,7 @@ class ModelHunter:
                 if f.lower().find(kw.strip()) != -1:
                     res.append(f)
         
-
-
-        # filter out unrelevant files that has little chance to be model file
+        # filter out unrelevant files that have little chance to contain a model
         ex_suffix = self._config.get("model_pattern","ex_suffix").split(',')
         ex_suffix = [x.strip() for x in ex_suffix]
         logging.debug("ex_suffix:" + ','.join(ex_suffix))
@@ -382,6 +388,7 @@ class ModelHunter:
                 final_res.append(x)
         return final_res
 
+    # Analyzing the header of the files, searching for keywords like TFL3
     def header_analyzer(self, assets_path, filelist):
         res = []
         for f in filelist:
@@ -391,6 +398,7 @@ class ModelHunter:
                         res.append(f)
         return res
 
+    # Remove PNG and Unity files considered as models
     def header_filter(self, assets_path, filelist):
         filter_not_header = {"png":b"PNG", "UnityModel":b"UnityFS"}
 
@@ -410,7 +418,7 @@ class ModelHunter:
         return False
 
 
-    # Compute entropy of a file : https://blog.cugu.eu/post/fast-python-file-entropy/
+    # Compute the entropy of a file : https://blog.cugu.eu/post/fast-python-file-entropy/
     def entropy(self, data):
         e = 0
         counter = collections.Counter(data)
@@ -420,7 +428,8 @@ class ModelHunter:
             p_x = count / l
             e += - p_x * math.log2(p_x)
         return e
-
+    
+    # Extract the path of the files that are probably models and put a grade on them
     def extract_model_path(self):
         # get all the filename assets/
         if self._args.decomposed_package is True:
@@ -437,7 +446,7 @@ class ModelHunter:
         res_kw = self.keywords_analyzer(relpath, "model_pattern")
         res = list(set().union(res_suf, res_kw))
 
-        # Search model by their header
+        # Search models by their header
         res_hd = self.header_analyzer(assets_path, relpath)
         for model_detected in res_hd:
             if model_detected not in res:
@@ -449,9 +458,6 @@ class ModelHunter:
         # filter bad header file
         res = self.header_filter(assets_path, res)
 
-                # Try read header: 
-
-
         # store model path
         self._models = res
 
@@ -460,10 +466,8 @@ class ModelHunter:
         self._rh.write("entropy\t\tsize\tfilename \t(entropy(0,8), [ent >7.5] means random):\n")
         #self._rh.write('\n'.join(res) + '\n')
 
-
         for f in res:
             ff = assets_path + '/' + f.strip()
-
             header = ""
             with open(ff, 'rb') as file_model:
                 header = file_model.read(10)
@@ -481,8 +485,8 @@ class ModelHunter:
             if (f in res_suf ):
                 probability_mask |= 1 << 3
             
-            # Skip this file because too low chance it was a model
-            # If extension blacklisted
+            # Skip this file, low chance to be a model
+            # If the extension is blacklisted
             if (not (probability_mask & 0b1110)):
                 continue
 
@@ -513,14 +517,14 @@ class ModelHunter:
             print(ff, size, ent, md5)
             self._rh.write(ent + '\t' + size + '\t' + f + '\t' + '\n')
 
-            # Add inside database HASH: 
+            # Add HASH in the database: 
             try:
                 self._cur.execute("INSERT or IGNORE INTO hash(md5_hash) VALUES(?)", [md5])
                 self._connect.commit()
             except Exception as e:
                 print(e)
             
-            # Get id from database
+            # Get id from the database
             try:
                 id_hash = self._cur.execute("SELECT id_hash FROM hash WHERE md5_hash=?", [md5])
                 id_hash = self._cur.fetchone()
@@ -528,14 +532,14 @@ class ModelHunter:
                 id_app = self._cur.fetchone()
             except Exception as e:
                 print(e)
-            # Add model to database
+            # Add the model to the database
             try:
                 self._cur.execute("INSERT or IGNORE INTO model(model_name, entropy, file_size, id_hash, id_app, header, probability) VALUES(?, ?, ?, ?, ?, ?, ?)", [f , ent, size, id_hash[0] , id_app[0], header, probability_mask])
                 self._connect.commit()
             except Exception as e:
                 print(e)
 
-            # write entropy report for quick reference
+            # write in the entropy report for quick reference
             self._entropy_report.append(ent + '\t' + md5 + '\t'+ size + '\t' + self._pkgname + '\t' + f + '\t')
 
         # save model files
@@ -549,7 +553,6 @@ class ModelHunter:
                 e += '\t'.join(guess_fw)
                 shell_cmd = "echo %s >> %s"%(e, self._entropy_report_path)
                 self.run_wo(shell_cmd)
-
 
     def setup_lib_symbol(self, filelists):
         symdir = self._outdir + '/' + self._pkgname + '/' + 'lib_symbol_files/'
@@ -684,14 +687,10 @@ class ModelHunter:
                 except Exception as e:
                     print(e)
 
-
                 libs = list(set(libs))
                 fw += ':'+','.join(libs)
                 guess_fw.append(fw)
                 
-                
-
-
         self._rh.write("\n\n### Guess Machine Learning Framework:\n")
         self._rh.write('\n'.join(guess_fw))
         self._rh.write('\n\n')
@@ -703,8 +702,6 @@ class ModelHunter:
             self._is_ml_app = True 
 
         self._guess_fw = guess_fw 
-
-
         print('§'*50)
         print(guess_fw)
         print('§'*50)
@@ -712,8 +709,8 @@ class ModelHunter:
         return guess_fw
 
     def lib_str_match(self, lib_files): # TODO: Not Used For Now
-        # report suspected libraries base whether model file show up in library strings 
-        self._rh.write("\n\n### Suspected for model files show up library strings under lib/:\n")
+        # report suspected libraries based on whether or not the model file shows up in library strings 
+        self._rh.write("\n\n### Suspecting some files to be models, they are showing up in the strings of libraries under lib/:\n")
 
         # generate str files for libraries
         strfilelist = self.setup_lib_strings(lib_files)
@@ -729,7 +726,7 @@ class ModelHunter:
         pass
 
     def general_str_match(self):
-        # report files that contains model file, do grep over decomposed dir
+        # report files that contain a model, do grep over decomposed dir
         self._rh.write("\n\n### General scan over decomposed dir for model files\n")
         for mf in self._model_files:
             res = self.search_dir(mf, self._decpath)
@@ -741,12 +738,10 @@ class ModelHunter:
     def lib_analysis(self):
         """
         extract interesting library files
-            1. if library file name has ml lib keywords, dump report it
-            2. if library file name don't have ml lib keywords, however, library symbols has, report it.
-            3. for reported lib,
-
+            1. if the name of the library has ml lib keywords, dump report it
+            2. if the name doesn't have ml lib keywords but the symbols have, report it.
         """
-        # get all the filename under lib/
+        # get all the filenames under lib/
         if self._args.decomposed_package is False:
             decpath = os.path.abspath(self._decdir+self._pkgname)
         else:
@@ -763,17 +758,16 @@ class ModelHunter:
         self._rh.write("\n\n### Suspected library files by name-matching under lib/:\n")
         self._rh.write('\n'.join(res_kw) + '\n')
 
-        # do lib symbol analysis
+        # do lib symbols analysis
         guess_fw = self.guess_ml_framework_by_magic_str(lib_files)
 
-        # generate entropy report after get framework info
+        # generate entropy report
         self.append_entropy_report(guess_fw)
-
         pass
 
     def check_magic_function(self, func_name):
         """
-        check whether function name matches any predefined magic_str in config:function_pattern
+        check whether the function name matches any predefined magic_str in config:function_pattern
         """
         # get function pattern
         magic_str_list = self._magic_func_list
@@ -811,7 +805,7 @@ class ModelHunter:
         shell_tml_top = self._config.get("script", "shell_top")
         shell_tml_mid = self._config.get("script", "shell_mid")
 
-        # generating javascript from template
+        # generating javascript from the template
         shell_cmd = "cat %s > %s" % (script_top, js_script_path)
         self.run_wo(shell_cmd)
         shell_cmd = "cat %s >> %s" % (json_path, js_script_path)
@@ -868,7 +862,7 @@ class ModelHunter:
         depdic = {mllib1: [mllib1, a, b], mllib2: [mllib2, c, d]}
         """
 
-        # first, get dependency analysis for all libraries
+        # first, get the dependencies analysis for all libraries
         all_libs = []
         symlist = self._symlist
         for symf in symlist:
@@ -947,7 +941,6 @@ class ModelHunter:
                     if self.check_magic_function(fields[2]) is True:
                         magic_json_list.append(fields[2])
 
-
                     # if function name contains framework name, add it
                     for fw in fws:
                         if fields[2].lower().find(fw) != -1:
@@ -971,7 +964,6 @@ class ModelHunter:
         except:
             logging.error("error in generating lib json files")
             print("Unexpected error:", sys.exc_info()[0])
-            #raise
 
         return res
 
@@ -1087,7 +1079,6 @@ class ModelHunter:
 
         return libdepdic
 
-
     def generate_lib_dependency_report(self, libs):
         self._rh.write("\n\n### Machine Learning Library Dependency/:\n")
         # deduplicate libs
@@ -1159,9 +1150,10 @@ class ModelHunter:
         self.run_wo(shell_cmd)
 
         pass
+    
     def copy_report(self):
         if len(self._models) == 0 and self._is_ml_app is False:
-            return # don't copy for not model found
+            return # don't copy for no model found
 
         link = self._preports + '/' + self._pkgname + '.report'
         target = os.path.abspath(self._report)
@@ -1189,7 +1181,7 @@ class ModelHunter:
 
     def analyze(self):
         if self._skip is True:
-            logging.warning("skipping analysis for report.md is there! see: %s" % self._report)
+            logging.warning("skipping analysis, report.md is there! see: %s" % self._report)
             return
 
         if self._args.decomposed_package is False:
@@ -1212,18 +1204,19 @@ class ModelHunter:
         # copy models to models dir if not exists
         self.copy_models()
         
-        # Test whether a machine learning app, if not, we might rm decomposed app
+        # Test whether it is a machine learning app, if not, we might suppress the decomposed app
         if self._is_ml_app is False and len(self._models) == 0:
             if self._args.space_efficient is True:
                 self.remove_decomposed_files()
         pass
 
+# Analyze the apps inside 'jobs'
 def worker(jobs, args, config, ns):
     # only do jobs that jobid % wid == 0
     logging.debug("new worker created!")
     length = len(jobs)
     for i in range(length):
-        logging.info('ModelHunter is analyzeing file ' + jobs[i])
+        logging.info('ModelHunter is analyzing file ' + jobs[i])
         model_profiler = ModelHunter(jobs[i], config, args)
         if args.test_only is True:
             model_profiler.test()
@@ -1286,17 +1279,16 @@ if __name__ == "__main__":
     if (os.path.exists(args.config_file)):
         config.read(args.config_file)
     else:
-        logging.error("config file not exists")
+        logging.error("config file doesn't exist")
         exit(1)
-
 
     jobs = []
     if os.path.isfile(args.apkpath):
-        logging.info('ModelHunter is analyzeing file ' + args.apkpath)
+        logging.info('ModelHunter is analyzing file ' + args.apkpath)
         model_profiler = ModelHunter(args.apkpath, config, args)
         model_profiler.analyze()
     elif os.path.isdir(args.apkpath):
-        logging.info('ModelHunter is analyzeing dir ' + args.apkpath)
+        logging.info('ModelHunter is analyzing dir ' + args.apkpath)
         if args.decomposed_package is True:
             if is_decomposed_dir(args.apkpath):
                 # Single decomposed dir
