@@ -52,8 +52,8 @@ def download_app(full_path, appid):
     browser.get("https://apkcombo.com/fr/downloader/#package=" + appid)
     time.sleep(10)
     
-    # Accep cookie :
-    # Remove from site ???
+    # Accept cookies :
+    # WARNING, depending on the language of your browser, you should probably change AGREE by the name of the button that permits to accept cookies on the website 
     browser.find_elements(By.XPATH,'//*[text()[contains(.,"AGREE")]]')[0].click()
 
     download_button = browser.find_elements(By.CSS_SELECTOR,"a[href*='https://download.apkcombo.com']")
