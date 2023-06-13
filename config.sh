@@ -9,5 +9,5 @@ MODELHUNTER_PATH='./modelhunter'
 KEYWORD_SCRAPPING='./search-keyword.txt'
 DOWNLOADER='python3 ./googleplaydownloader/apkdownloader_combo/main.py'
 VERBOSE='FALSE'
-SAVE_APK='TRUE' # FALSE TO NOT SAVE APK
+SAVE_APK='TRUE' # FALSE DONT SAVE APK
 SCRAPING='FALSE'
