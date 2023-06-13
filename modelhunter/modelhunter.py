@@ -14,7 +14,7 @@ import math, collections
 
 class ModelHunter:
     """
-    ModelHunter is a static Android APK analysis tool that extract all 
+    ModelHunter is a static Android APK analysis tool that extracts all 
     the useful information about the machine learning model used in the App.
     """
     def __init__(self, apkpath, config, args):
@@ -33,7 +33,7 @@ class ModelHunter:
         self._is_ml_app = False 
         self._skip = False
         self._guess_fw = None
-        # header magic number of model
+        # header magic number from tensorflow and sensetime
         self._FRAMEWORK_MAGIC_NUMBER = {"tensorflow":b"TFL3", "sensetime":b"STEF"}
         
         try:
@@ -85,34 +85,33 @@ class ModelHunter:
         except Exception as e:
             print(e)
         pass
-
+    
+    # return the name of the apk without the .apk extension
     def get_path_base(self):
         base = os.path.basename(self._apkpath)
         if base.endswith('.apk'):
             return base[:-4]
         else:
             return base
-
+    
+    # setup the directories
     def setup_output_path(self):
         # output dir
         try:
             os.stat(self._outdir)
         except:
             os.mkdir(self._outdir)
-    
         # decompose dir 
         if self._args.decomposed_package is False:
             try:
                 os.stat(self._decdir)
             except:
                 os.mkdir(self._decdir)
-
         # reports dir 
         try:
             os.stat(self._preports)
         except:
             os.mkdir(self._preports)
-
         # models dir 
         try:
             os.stat(self._pmodels)
