@@ -59,7 +59,7 @@ Spawning shell within ...
 
 - `hunt.sh` - Pipeline for app analysis
 - `scrapping-playstore.sh` - Scrap Google Play 
-- `sort-report.sh` - extract some information from report
+- `sort-report.sh` - extract some information from the report
 - `googleplaydownloader/apkdownloader_combo/main.py` -  Python script to download Android apps
 - `modelhunter/modelhunter.py` - script to find and extract models 
 - `modelhunter/model_stat.db` - results inside a SQLite DB 
@@ -105,7 +105,7 @@ Trying to download com.example.app
 
 ```
 $ ./hunt.sh -s
-Start scrapping, list of applications will be writen in app_ids.txt
+Starting scrapping, list of applications will be writen in app_ids.txt
 ###
 # Test 0/22541 with application : com.example.app
 ###
