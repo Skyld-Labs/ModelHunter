@@ -7,13 +7,17 @@
 
 A Linux-based system with Firefox installed to enable app downloads using Selenium.
 Install the following Linux packages:
-
 ```console
 sudo apt-get install aapt apktool silversearch-ag nm md5sum
 ```
 
-Install the required Python packages with pip:
+Or, for a MacOS system, install the same packages using homebrew:
+```console
+brew apt-get install aapt apktool silversearch-ag nm md5sum
 ```
+
+Install the required Python packages with pip:
+```console
 pip install configparser progressbar db-sqlite3 selenium
 ```
 
@@ -103,7 +107,7 @@ Trying to download com.example.app
 
 **Scraping application package IDs on Google Play and analysing them :**
 
-```
+```console
 $ ./hunt.sh -s
 Starting scrapping, list of applications will be writen in app_ids.txt
 ###
@@ -114,7 +118,7 @@ Starting scrapping, list of applications will be writen in app_ids.txt
 
 
 **You can use it without any options, it will take the default config inside config.sh :**
-```
+```console
 #!/usr/bin/env bash
 APP_ID='app_ids.txt'
 APP_TESTED='app_ids_tested.txt'

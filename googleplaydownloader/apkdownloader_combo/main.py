@@ -53,8 +53,14 @@ def download_app(full_path, appid):
     time.sleep(10)
     
     # Accept cookies :
-    # WARNING, depending on the language of your browser, you should probably change AGREE by the name of the button that permits to accept cookies on the website 
-    browser.find_elements(By.XPATH,'//*[text()[contains(.,"AGREE")]]')[0].click()
+    # WARNING - Depending on the language of your browser, you should probably change "Consent" by the name of the button that permits to accept cookies on the website
+    #           And, as the website evolves, the button may change to another word (e.g. "Accept", "Agree", "OK", etc.)
+    # browser.find_elements(By.XPATH,'//*[text()[contains(.,"Consent")]]')[0].click()
+
+    # Simulate two tab key presses
+    ActionChains(browser).send_keys(Keys.TAB).send_keys(Keys.TAB).perform()
+    # Press the return key to click the "Consent" button and accept cookies
+    ActionChains(browser).send_keys(Keys.RETURN).perform()
 
     download_button = browser.find_elements(By.CSS_SELECTOR,"a[href*='https://download.apkcombo.com']")
     if len(download_button) == 0:
