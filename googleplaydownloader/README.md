@@ -4,7 +4,7 @@ This program downloads android packages using selenium that can script the brows
 
 Usage :
 ```console
-    python3 apkdownloader_combo/main.py com.spotify.music DirectoryWhereToDownload
+python3 apkdownloader_combo/main.py com.spotify.music DirectoryWhereToDownload
 ``` 
 
 Installation : 
